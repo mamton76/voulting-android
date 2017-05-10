@@ -1,6 +1,9 @@
 package com.example.mamton.testapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Horse extends AbstractEntity {
+    @SerializedName("name")
     private String name;
 
     public Horse(final long id,

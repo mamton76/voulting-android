@@ -1,4 +1,4 @@
-package com.example.mamton.testapp;
+package com.example.mamton.testapp.gui;
 
 import android.app.Fragment;
 

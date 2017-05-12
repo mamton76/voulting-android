@@ -60,7 +60,7 @@ public abstract class AbstractFacade<T extends AbstractEntity> {
     }
 
     @NonNull
-    protected SQLiteDatabase getDb() {
+    private SQLiteDatabase getDb() {
         return db;
     }
 
@@ -93,8 +93,7 @@ public abstract class AbstractFacade<T extends AbstractEntity> {
 
         List<T> result = null;
         try {
-            final Cursor cursor = db.query(getTableName(), getAllColumns(),
-                    selection, selectionArgs, null, null, orderBy, limit);
+            final Cursor cursor = getCursor(selection, selectionArgs, orderBy, limit);
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     result = new ArrayList<>(cursor.getCount());
@@ -112,6 +111,13 @@ public abstract class AbstractFacade<T extends AbstractEntity> {
             result = new ArrayList<>();
         }
         return result;
+    }
+
+    public Cursor getCursor(final @Nullable String selection,
+            final @Nullable String[] selectionArgs, final @Nullable String orderBy,
+            final @Nullable String limit) {
+        return db.query(getTableName(), getAllColumns(),
+                selection, selectionArgs, null, null, orderBy, limit);
     }
 
     public int removeAll() {

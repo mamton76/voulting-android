@@ -15,7 +15,7 @@ public abstract class AbstractEntity {
     @SerializedName("localVersion")
     private long localVersion = NOT_DEFINED;
 
-    AbstractEntity(final long id, final long serverId, final long serverVersion,
+    protected AbstractEntity(final long id, final long serverId, final long serverVersion,
             final long localVersion) {
         this.id = id;
         this.serverId = serverId;

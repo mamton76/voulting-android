@@ -19,25 +19,33 @@ import timber.log.Timber;
 
 public class DB {
 
-    static final String TABLE_HORSE = "HORSE";
-    static final String TABLE_EVENT = "EVENT";
-    static final String TABLE_PERSON = "PERSON";
-    static final String TABLE_TEAM = "TEAM";
-    static final String TABLE_PARTICIPIANT = "PARTICIPIANT";
+    public static final String TABLE_CLUB = "CLUB";
+    public static final String TABLE_HORSE = "HORSE";
+    public static final String TABLE_EVENT = "EVENT";
+    public static final String TABLE_PERSON = "PERSON";
+    public static final String TABLE_TEAM = "TEAM";
+    public static final String TABLE_PARTICIPIANT = "PARTICIPIANT";
 
-    static final String FIELD_COMMON_ID = "ID";
-    static final String FIELD_COMMON_SERVER_ID = "SERVER_ID";
-    static final String FIELD_COMMON_SERVER_VERSION = "SERVER_VERSION";
-    static final String FIELD_COMMON_LOCAL_VERSION = "LOCAL_VERSION";
+    public static final String FIELD_COMMON_ID = "ID";
+    public static final String FIELD_COMMON_SERVER_ID = "SERVER_ID";
+    public static final String FIELD_COMMON_SERVER_VERSION = "SERVER_VERSION";
+    public static final String FIELD_COMMON_LOCAL_VERSION = "LOCAL_VERSION";
 
-    static final String FIELD_HORSE_NAME = "NAME";
-    static final String FIELD_EVENT_DATES = "DATES";
-    static final String FIELD_EVENT_NAME = "NAME";
-    static final String FIELD_PERSON_NAME = "NAME";
-    static final String FIELD_PARTICIPIANT_EVENT = "EVENT_ID";
-    static final String FIELD_PARTICIPIANT_HORSE = "HORSE_ID";
-    static final String FIELD_TEAM_PERSON = "PERSON_ID";
-    static final String FIELD_TEAM_PARTICIPIANT = "PARTICIPIANT_ID";
+    public static final String FIELD_CLUB_NAME = "NAME";
+
+    public static final String FIELD_HORSE_NAME = "NAME";
+    private static final String FIELD_HORSE_CLUB_ID = "FIELD_HORSE_CLUB_ID";
+
+    public static final String FIELD_EVENT_DATES = "DATES";
+    public static final String FIELD_EVENT_NAME = "NAME";
+
+    public static final String FIELD_PERSON_NAME = "NAME";
+
+    public static final String FIELD_PARTICIPIANT_EVENT = "EVENT_ID";
+    public static final String FIELD_PARTICIPIANT_HORSE = "HORSE_ID";
+
+    public static final String FIELD_TEAM_PERSON = "PERSON_ID";
+    public static final String FIELD_TEAM_PARTICIPIANT = "PARTICIPIANT_ID";
 
     private static final String DATABASE_PATH = "db_path";  //shared preferences key
     private static final String DATABASE_NAME = "SPORT_VOULTING";
@@ -181,6 +189,7 @@ public class DB {
     }
 
     private void createTables(final SQLiteDatabase db) {
+        createClubTable(db);
         createHorseTable(db);
         createEventTable(db);
         createPersonTable(db);
@@ -230,10 +239,23 @@ public class DB {
     /**
      * Helper method for create/update horse table
      */
+    private void createClubTable(final SQLiteDatabase db) {
+        final String sb = "CREATE TABLE IF NOT EXISTS " + TABLE_CLUB + " (" +
+                getCommonPart() +
+                FIELD_CLUB_NAME + " TEXT, " +
+                ");";
+
+        db.execSQL(sb);
+    }
+
+    /**
+     * Helper method for create/update horse table
+     */
     private void createHorseTable(final SQLiteDatabase db) {
         final String sb = "CREATE TABLE IF NOT EXISTS " + TABLE_HORSE + " (" +
                 getCommonPart() +
                 FIELD_HORSE_NAME + " TEXT, " +
+                FIELD_HORSE_CLUB_ID + " INTEGER, " +
                 ");";
 
         db.execSQL(sb);

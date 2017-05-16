@@ -72,7 +72,8 @@ public class DictFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         // Set the adapter
-        Context context = view.getContext();
+        //Context context = view.getContext();
+        Context context = getActivity();
 
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -80,6 +81,7 @@ public class DictFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
         recyclerView.setAdapter(new MyDictRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
         return view;
     }
 
@@ -95,9 +97,16 @@ public class DictFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
     }
+
+
 
     @Override
     public void onDetach() {

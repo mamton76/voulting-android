@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.StackView;
 import android.widget.TextView;
 
 import com.example.mamton.testapp.R;
@@ -19,15 +18,12 @@ import timber.log.Timber;
 
 //todo решить куда засунуть этого листенера
 public class MainActivity extends AppCompatActivity implements
-        DictFragment.OnListFragmentInteractionListener {
+        DictFragment.OnListFragmentInteractionListener,
+        EventsFragment.OnListFragmentInteractionListener {
 
     @BindView(R.id.message)
     @NonNull
     TextView mTextMessage;
-
-    @BindView(R.id.stack)
-    @NonNull
-    StackView mStack;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
                         .addToBackStack(null)
                         .replace(R.id.fragmentPlace, fr)
                         .commit();
-                fragmentManager.executePendingTransactions();
+                res = fragmentManager.executePendingTransactions();
             }
 
             return res;

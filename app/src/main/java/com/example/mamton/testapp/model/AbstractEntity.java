@@ -2,9 +2,11 @@ package com.example.mamton.testapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public abstract class AbstractEntity {
+import java.io.Serializable;
 
-    private static final int NOT_DEFINED = -1;
+public abstract class AbstractEntity implements Serializable {
+
+    public static final int NOT_DEFINED = -1;
 
     @SerializedName("localId")
     private long id = NOT_DEFINED;
@@ -13,7 +15,9 @@ public abstract class AbstractEntity {
     @SerializedName("version")
     private long serverVersion = NOT_DEFINED;
     @SerializedName("localVersion")
-    private long localVersion = NOT_DEFINED;
+    protected long localVersion = NOT_DEFINED;
+    @SerializedName("deleted")
+    private boolean isDeleted = false;
 
     protected AbstractEntity(final long id, final long serverId, final long serverVersion,
             final long localVersion) {
@@ -38,5 +42,13 @@ public abstract class AbstractEntity {
 
     public long getLocalVersion() {
         return localVersion;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(final boolean deleted) {
+        isDeleted = deleted;
     }
 }

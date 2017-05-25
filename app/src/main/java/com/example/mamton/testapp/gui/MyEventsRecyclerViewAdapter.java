@@ -8,22 +8,21 @@ import android.widget.TextView;
 
 import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.gui.EventsFragment.OnListFragmentInteractionListener;
-import com.example.mamton.testapp.gui.dummy.DummyContent.DummyItem;
+import com.example.mamton.testapp.model.Event;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display events and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyEventsRecyclerViewAdapter extends
         RecyclerView.Adapter<MyEventsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Event> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyEventsRecyclerViewAdapter(List<DummyItem> items,
+    public MyEventsRecyclerViewAdapter(List<Event> items,
             OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -39,8 +38,8 @@ public class MyEventsRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(String.valueOf(mValues.get(position).getId()));
+        holder.mContentView.setText(mValues.get(position).getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +63,8 @@ public class MyEventsRecyclerViewAdapter extends
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+
+        public Event mItem;
 
         public ViewHolder(View view) {
             super(view);

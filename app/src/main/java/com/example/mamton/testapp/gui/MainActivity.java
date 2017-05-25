@@ -2,6 +2,7 @@ package com.example.mamton.testapp.gui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,13 +11,15 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.mamton.testapp.R;
-import com.example.mamton.testapp.gui.dummy.DummyContent;
+import com.example.mamton.testapp.gui.dict.DictionaryItemListActivity;
+import com.example.mamton.testapp.model.Event;
+import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-//todo решить куда засунуть этого листенера
+//todo решить куда засунуть этих листенеров (кажется их место все же в самих фрагментах)
 public class MainActivity extends AppCompatActivity implements
         DictFragment.OnListFragmentInteractionListener,
         EventsFragment.OnListFragmentInteractionListener {
@@ -75,7 +78,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onListFragmentInteraction(final DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(final Event item) {
         Timber.d("item: %s", item);
     }
+
+    @Override
+    public void onListFragmentInteraction(final @NonNull DBMetaInfo.Tables item) {
+        //todo mamton ? а надо
+        //startActivityForResult(DictionaryItemListActivity.getIntent(item), DictionaryItemListActivity.);
+        Intent intent = DictionaryItemListActivity.getIntent(this, item);
+        startActivity(intent);
+    }
+
 }

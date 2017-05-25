@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mamton.testapp.R;
-import com.example.mamton.testapp.gui.dummy.DummyContent;
-import com.example.mamton.testapp.gui.dummy.DummyContent.DummyItem;
+import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +79,7 @@ public class DictFragment extends Fragment {
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        recyclerView.setAdapter(new MyDictRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        recyclerView.setAdapter(new MyDictRecyclerViewAdapter(mListener));
 
         return view;
     }
@@ -126,7 +125,6 @@ public class DictFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
 
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(DBMetaInfo.Tables item);
     }
 }

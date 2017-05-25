@@ -3,4 +3,10 @@
     <string name="title_home">Главная</string>
     <string name="title_dashboard">Справочники</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_dictionaryitem_list">Элементы справочника</string>
+    <string name="title_dictionaryitem_detail">Элемент справочника детально</string>
+
+    <string name="title_dictionary_club">Клубы</string>
+    <string name="title_dictionary_horse">Лошади</string>
+
 </resources>

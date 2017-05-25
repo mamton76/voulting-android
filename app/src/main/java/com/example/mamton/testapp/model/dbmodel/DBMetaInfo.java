@@ -2,88 +2,52 @@ package com.example.mamton.testapp.model.dbmodel;
 
 import android.support.annotation.NonNull;
 
+import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.db.DB;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class DBMetaInfo {
-    enum Tables {
-        CLUB(DB.TABLE_CLUB),
-        HORSE(DB.TABLE_HORSE);
+    public enum Tables {
+        CLUB(new TableMetaInfo(TableNames.CLUB,
+                Arrays.asList(
+                        new ColumnMetaInfo(DB.FIELD_CLUB_NAME, ColumnMetaInfo.ColumnType.STRING,
+                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE),
+                        new ColumnMetaInfo(DB.FIELD_CLUB_PLACE, ColumnMetaInfo.ColumnType.STRING,
+                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE))),
+                R.string.title_dictionary_club),
+        HORSE(new TableMetaInfo(TableNames.HORSE,
+                Arrays.asList(
+                        new ColumnMetaInfo(DB.FIELD_HORSE_NAME, ColumnMetaInfo.ColumnType.STRING,
+                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE),
+                        new ColumnMetaInfo(DB.FIELD_HORSE_CLUB_ID, ColumnMetaInfo.ColumnType.FK,
+                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE))),
+                R.string.title_dictionary_horse);
 
-        private String name;
+        @NonNull
+        private final TableMetaInfo meta;
 
-        Tables(final String tableName) {
-            this.name = tableName;
+        Tables(@NonNull final TableMetaInfo meta, final int tableNameResource) {
+            this.meta = meta;
         }
 
-        public String getName() {
-            return name;
-        }
-    }
-
-    public static class TableMetaInfo {
-        @NonNull
-        private Tables table;
-        @NonNull
-        private List<ColumnMetaInfo> columns;
-
-        public TableMetaInfo(@NonNull final Tables table,
-                @NonNull final List<ColumnMetaInfo> columns) {
-            this.table = table;
-            this.columns = columns;
+        public TableMetaInfo getMetaInfo() {
+            return meta;
         }
 
-        @NonNull
-        public Tables getTable() {
-            return table;
-        }
+        public enum TableNames {
+            CLUB(DB.TABLE_CLUB),
+            HORSE(DB.TABLE_HORSE);
 
-        @NonNull
-        public List<ColumnMetaInfo> getColumns() {
-            return columns;
-        }
-    }
+            private String name;
 
-    public static class ColumnMetaInfo {
-        public static final int FLAG_MAIN = 0x1;
+            TableNames(final String tableName) {
+                this.name = tableName;
+            }
 
-        @NonNull
-        private final String name;
-        @NonNull
-        private final ColumnType type;
-        @NonNull
-        private final int flags;
-
-        public ColumnMetaInfo(@NonNull final String name,
-                @NonNull final ColumnType type, @NonNull final int flags) {
-            this.name = name;
-            this.type = type;
-            this.flags = flags;
+            public String getName() {
+                return name;
+            }
         }
     }
-
-    public static class ColumnFKMetaInfo extends ColumnMetaInfo {
-        @NonNull
-        private final Tables table;
-
-        ColumnFKMetaInfo(@NonNull final String name,
-                @NonNull final ColumnType type, @NonNull final int flags,
-                @NonNull final Tables table) {
-            super(name, type, flags);
-            this.table = table;
-        }
-
-        @NonNull
-        public Tables getTable() {
-            return table;
-        }
-    }
-
-    enum ColumnType {
-        STRING,
-        NUMBER,
-        FK
-    }
-
 }

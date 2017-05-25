@@ -31,7 +31,7 @@ public class HorseFacade extends AbstractFacade<Horse> {
 
     @NonNull
     @Override
-    protected Horse createInstance(@NonNull final Cursor cursor) {
+    public Horse createInstance(@NonNull final Cursor cursor) {
         return null;
         /*Horse res = new Horse()
         return cursor.getLong(cursor.getColumnIndexOrThrow());
@@ -41,14 +41,9 @@ public class HorseFacade extends AbstractFacade<Horse> {
 
     @NonNull
     @Override
-    protected ContentValues createContentValues(@NonNull final Horse object) {
-        ContentValues values = new ContentValues();
-        if (object.getId() != -1) {
-            values.put(DB.FIELD_COMMON_ID, object.getId());
-            values.put(DB.FIELD_COMMON_LOCAL_VERSION, object.getId());
-        }
-        values.put(DB.FIELD_COMMON_ID, object.getId());
-        values.put(DB.FIELD_COMMON_ID, object.getId());
+    protected ContentValues appendContentValues(@NonNull final Horse object,
+            @NonNull final ContentValues values) {
         return values;
     }
+
 }

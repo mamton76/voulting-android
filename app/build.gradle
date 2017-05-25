@@ -11,8 +11,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 /**
- * retroLambda {jvmArgs '-noverify'}
- */
+ * retroLambda {jvmArgs '-noverify'}*/
 
     defaultConfig {
         applicationId "com.example.mamton.testapp"
@@ -35,11 +34,11 @@ android {
 
 def butterknifeVersion = '8.4.0'
 def butterknife = [
-        library: "com.jakewharton:butterknife:${butterknifeVersion}",
+        library : "com.jakewharton:butterknife:${butterknifeVersion}",
         compiler: "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
 ]
 
-def supportVersion = '25.2.0'
+def supportVersion = '25.3.1'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -54,19 +53,25 @@ dependencies {
      * Stream API from Java 8 rewritten on iterators for Java 7 and below
      * https://github.com/aNNiMON/Lightweight-Stream-API
      */
-    compile 'com.annimon:stream:1.1.7'
+    
 
     compile "com.android.support:appcompat-v7:${supportVersion}"
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-vector-drawable:25.2.0'
     compile "com.android.support:support-core-ui:${supportVersion}"
-    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile "com.android.support:design:${supportVersion}"
+    compile "com.android.support:support-vector-drawable:${supportVersion}"
+    compile "com.android.support:recyclerview-v7:${supportVersion}"
 
+    compile 'io.reactivex:rxandroid:1.2.0'
+
+    compile 'com.annimon:stream:1.1.7'
     compile 'com.jakewharton.timber:timber:4.5.0'
+
     compile 'com.arello-mobile:moxy-compiler:1.5.1'
     compile 'com.arello-mobile:moxy:1.5.1'
+
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.yandex:mapkit:15.90.45'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }

@@ -22,11 +22,24 @@
             </intent-filter>
         </activity>
 
-        <!--provider android:name=".VoultingContentProvider"
+        <!--
+        provider android:name=".VoultingContentProvider"
             android:authorities="voultingData"
             android:enabled="true" android:exported="true">
             <meta-data android:name="VoultingContentProvider"/>
-        </provider-->
+        </provider
+        -->
+        <activity android:name=".gui.dict.DictionaryItemListActivity"
+            android:label="@string/title_dictionaryitem_list"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".gui.dict.DictionaryItemDetailActivity"
+            android:label="@string/title_dictionaryitem_detail"
+            android:parentActivityName=".gui.dict.DictionaryItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mamton.testapp.gui.dict.DictionaryItemListActivity" />
+        </activity>
     </application>
 
 </manifest>

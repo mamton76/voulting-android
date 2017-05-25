@@ -8,23 +8,20 @@ import android.widget.TextView;
 
 import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.gui.DictFragment.OnListFragmentInteractionListener;
-import com.example.mamton.testapp.gui.dummy.DummyContent.DummyItem;
+import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
 
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * ?? todo mamton использовать com.mikepenz.fastadapter.items ?
  */
 public class MyDictRecyclerViewAdapter extends
         RecyclerView.Adapter<MyDictRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyDictRecyclerViewAdapter(List<DummyItem> items,
-            OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public MyDictRecyclerViewAdapter(OnListFragmentInteractionListener listener) {
         mListener = listener;
     }
 
@@ -37,16 +34,14 @@ public class MyDictRecyclerViewAdapter extends
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = DBMetaInfo.Tables.values()[position];
+
+        holder.mIdView.setText(holder.mItem.getMetaInfo().getTable().getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
@@ -55,26 +50,22 @@ public class MyDictRecyclerViewAdapter extends
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return DBMetaInfo.Tables.values().length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        @BindView(R.id.id)
+        public TextView mIdView;
+
+        public DBMetaInfo.Tables mItem;
 
         public ViewHolder(View view) {
             super(view);
+            ButterKnife.bind(this, view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
     }
 }

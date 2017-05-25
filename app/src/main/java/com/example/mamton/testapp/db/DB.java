@@ -3,6 +3,7 @@ package com.example.mamton.testapp.db;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
@@ -32,9 +33,10 @@ public class DB {
     public static final String FIELD_COMMON_LOCAL_VERSION = "LOCAL_VERSION";
 
     public static final String FIELD_CLUB_NAME = "NAME";
+    public static final String FIELD_CLUB_PLACE = "PLACE";
 
     public static final String FIELD_HORSE_NAME = "NAME";
-    private static final String FIELD_HORSE_CLUB_ID = "FIELD_HORSE_CLUB_ID";
+    public static final String FIELD_HORSE_CLUB_ID = "FIELD_HORSE_CLUB_ID";
 
     public static final String FIELD_EVENT_DATES = "DATES";
     public static final String FIELD_EVENT_NAME = "NAME";
@@ -50,7 +52,7 @@ public class DB {
     private static final String DATABASE_PATH = "db_path";  //shared preferences key
     private static final String DATABASE_NAME = "SPORT_VOULTING";
     private static final int MIN_SUPPORTED_DATABASE_VERSION = 0;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static DB me;
     private SQLiteDatabase db;
 
@@ -185,7 +187,31 @@ public class DB {
         return db;
     }
 
-    private void upgradeDb(final SQLiteDatabase db, final int version, final int databaseVersion) {
+    private void upgradeDb(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+        Timber.w("Upgrading database from version %s to %s, which will destroy all old data",
+                oldVersion, newVersion);
+        try {
+            switch (oldVersion) {
+                case 1:
+
+                    break;
+                default:
+                    throw new SQLiteException(String
+                            .format("Upgrade script for %s not found", oldVersion));
+            }
+
+            db.setVersion(newVersion);
+        } catch (SQLiteException ex) {
+            Timber.e(ex, "Error executing SQL statement: %s", ex.getMessage());
+            //Re-create database
+            String dbPath = db.getPath();
+            db.close();
+            File dbFile = new File(dbPath);
+            dbFile.delete();
+            createDB(dbPath);
+        }
+
+
     }
 
     private void createTables(final SQLiteDatabase db) {
@@ -242,7 +268,7 @@ public class DB {
     private void createClubTable(final SQLiteDatabase db) {
         final String sb = "CREATE TABLE IF NOT EXISTS " + TABLE_CLUB + " (" +
                 getCommonPart() +
-                FIELD_CLUB_NAME + " TEXT, " +
+                FIELD_CLUB_NAME + " TEXT " +
                 ");";
 
         db.execSQL(sb);
@@ -255,7 +281,7 @@ public class DB {
         final String sb = "CREATE TABLE IF NOT EXISTS " + TABLE_HORSE + " (" +
                 getCommonPart() +
                 FIELD_HORSE_NAME + " TEXT, " +
-                FIELD_HORSE_CLUB_ID + " INTEGER, " +
+                FIELD_HORSE_CLUB_ID + " INTEGER " +
                 ");";
 
         db.execSQL(sb);

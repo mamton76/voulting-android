@@ -2,42 +2,53 @@ package com.example.mamton.testapp.gui.core;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
+
 /**
  * Provides ability to bind a recycler view to a Android database cursor
  * Created by skyfishjy on 10/31/14.
  * Modified by emuneee on 1/5/16.
- * todo mamton http://emuneee.com/blog/2016/01/10/cursors-recyclerviews-and-itemanimators/
+ * http://emuneee.com/blog/2016/01/10/cursors-recyclerviews-and-itemanimators/
  */
-public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class ChangebleCursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder, T>
+        extends RecyclerView.Adapter<VH> {
+
     private static final int INSERTED = 1;
     private static final int REMOVED = 2;
     private static final int CHANGED = 3;
     private static final int ALL = -1;
+
     private final String mComparisonColumn;
     private final DataSetObserver mDataSetObserver;
+    private OnItemClickListener<T> onItemClickListener;
+
     private int mRowIdColumn;
     private Cursor mCursor;
     private boolean mDataValid;
 
-    public CursorRecyclerViewAdapter2(Cursor cursor) {
-        this(cursor, null);
+    public ChangebleCursorRecyclerViewAdapter(Cursor cursor, String idColumnName) {
+        this(cursor, null, idColumnName);
     }
-    public CursorRecyclerViewAdapter2(Cursor cursor, String comparisonColumn) {
+
+    public ChangebleCursorRecyclerViewAdapter(Cursor cursor, String comparisonColumn,
+            String fieldIdColumnName) {
         mCursor = cursor;
         mComparisonColumn = comparisonColumn;
         mDataValid = cursor != null;
-        mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
+        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(fieldIdColumnName) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
         if (mCursor != null) {
             mCursor.registerDataSetObserver(mDataSetObserver);
         }
     }
+
     public Cursor getCursor() {
         return mCursor;
     }
+
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor != null) {
@@ -45,6 +56,7 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         }
         return 0;
     }
+
     @Override
     public long getItemId(int position) {
         if (mDataValid && mCursor != null && mCursor.moveToPosition(position)) {
@@ -52,11 +64,14 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         }
         return 0;
     }
+
     @Override
     public void setHasStableIds(boolean hasStableIds) {
         super.setHasStableIds(true);
     }
+
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor, int position);
+
     @Override
     public void onBindViewHolder(VH viewHolder, int position) {
         if (!mDataValid) {
@@ -67,6 +82,7 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         }
         onBindViewHolder(viewHolder, mCursor, position);
     }
+
     /**
      * Change the underlying cursor to a new cursor. If there is an existing cursor it will be
      * closed.
@@ -85,9 +101,11 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
             }
         }
     }
+
     /**
      * Processes two cursors, old/existing cursor and a new cursor, returning a list of indexes who's
      * records were inserted, deleted, or changed
+     *
      * @param oldCursor
      * @param newCursor
      * @return
@@ -111,9 +129,11 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         }
         return changes;
     }
+
     /**
      * Returns a list of indexes of records that were deleted
      * May also return whether or not ALL records were inserted
+     *
      * @param oldCursor
      * @param newCursor
      * @return
@@ -134,7 +154,7 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
                             oldRecordFound = true;
                             break;
                         }
-                    } while(newCursor.moveToNext());
+                    } while (newCursor.moveToNext());
                     if (!oldRecordFound) {
                         changes.put(cursorIndex, REMOVED);
                     }
@@ -149,9 +169,11 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         newCursor.moveToPosition(newCursorPosition);
         return changes;
     }
+
     /**
      * Returns an array of indexes who's records were newly inserted or changed
      * Will also return whether or not all the records were inserted or removed
+     *
      * @param oldCursor
      * @param newCursor
      * @return
@@ -172,7 +194,8 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
                         if (oldCursor.getInt(mRowIdColumn) == newCursor.getInt(mRowIdColumn)) {
                             newRecordFound = true;
                             // values are different, this record has changed
-                            if (!oldCursor.getString(columnIndex).contentEquals(newCursor.getString(columnIndex))) {
+                            if (!oldCursor.getString(columnIndex)
+                                    .contentEquals(newCursor.getString(columnIndex))) {
                                 changes.put(cursorIndex, CHANGED);
                             }
                             break;
@@ -198,8 +221,8 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         newCursor.moveToPosition(newCursorPosition);
         return changes;
     }
+
     /**
-     *
      * @param newCursor
      * @param changes
      * @return
@@ -249,12 +272,28 @@ public abstract class CursorRecyclerViewAdapter2<VH extends RecyclerView.ViewHol
         }
         return oldCursor;
     }
+
+    public void setOnItemClickListener(@Nullable OnItemClickListener<T> listener) {
+        this.onItemClickListener = listener;
+    }
+
+    @Nullable
+    protected OnItemClickListener<T> getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public interface OnItemClickListener<T> {
+        void onItemSelected(T item, int position);
+    }
+
     private class NotifyingDataSetObserver extends DataSetObserver {
+
         @Override
         public void onChanged() {
             super.onChanged();
             mDataValid = true;
         }
+
         @Override
         public void onInvalidated() {
             super.onInvalidated();

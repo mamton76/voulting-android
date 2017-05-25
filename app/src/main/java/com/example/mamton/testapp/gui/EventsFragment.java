@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mamton.testapp.R;
-import com.example.mamton.testapp.gui.dummy.DummyContent;
-import com.example.mamton.testapp.gui.dummy.DummyContent.DummyItem;
+import com.example.mamton.testapp.model.Event;
+
+import java.util.Arrays;
 
 /**
  * A fragment representing a list of Items.
@@ -68,7 +69,9 @@ public class EventsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyEventsRecyclerViewAdapter(DummyContent.ITEMS1, mListener));
+            recyclerView.setAdapter(new MyEventsRecyclerViewAdapter(
+                    Arrays.asList(Event.SAMPLE_EVENT),
+                    mListener));
         }
         return view;
     }
@@ -103,7 +106,6 @@ public class EventsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
 
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Event item);
     }
 }

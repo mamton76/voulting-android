@@ -9,13 +9,13 @@ import com.example.mamton.testapp.model.dbmodel.ColumnMetaInfo;
 import com.example.mamton.testapp.model.dbmodel.DBEntity;
 
 public class NumberEditor extends AbstractEditor<Long> {
-    public static NumberEditor getInstance(Context context, ColumnMetaInfo meta) {
-        return new NumberEditor(context, meta);
+    public static NumberEditor getInstance(Context context, ColumnMetaInfo meta, final int id) {
+        return new NumberEditor(context, meta, id);
     }
 
 
-    private NumberEditor(final Context context, final ColumnMetaInfo meta) {
-        super(meta, context);
+    private NumberEditor(final Context context, final ColumnMetaInfo meta, final int id) {
+        super(meta, context, id);
         editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
         //todo mamton установить максимальное число знаков и так далее
     }

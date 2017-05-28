@@ -27,7 +27,7 @@ public class DB {
     public static final String TABLE_TEAM = "TEAM";
     public static final String TABLE_PARTICIPIANT = "PARTICIPIANT";
 
-    public static final String FIELD_COMMON_ID = "ID";
+    public static final String FIELD_COMMON_ID = "_id";
     public static final String FIELD_COMMON_SERVER_ID = "SERVER_ID";
     public static final String FIELD_COMMON_SERVER_VERSION = "SERVER_VERSION";
     public static final String FIELD_COMMON_LOCAL_VERSION = "LOCAL_VERSION";
@@ -268,7 +268,8 @@ public class DB {
     private void createClubTable(final SQLiteDatabase db) {
         final String sb = "CREATE TABLE IF NOT EXISTS " + TABLE_CLUB + " (" +
                 getCommonPart() +
-                FIELD_CLUB_NAME + " TEXT " +
+                FIELD_CLUB_NAME + " TEXT ," +
+                FIELD_CLUB_PLACE +
                 ");";
 
         db.execSQL(sb);

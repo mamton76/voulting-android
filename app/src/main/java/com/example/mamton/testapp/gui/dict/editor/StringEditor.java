@@ -8,13 +8,13 @@ import com.example.mamton.testapp.model.dbmodel.ColumnMetaInfo;
 import com.example.mamton.testapp.model.dbmodel.DBEntity;
 
 public class StringEditor extends AbstractEditor<String> {
-    public static StringEditor getInstance(Context context, ColumnMetaInfo meta) {
-        return new StringEditor(context, meta);
+    public static StringEditor getInstance(Context context, ColumnMetaInfo meta, final int id) {
+        return new StringEditor(context, meta, id);
     }
 
 
-    private StringEditor(final Context context, final ColumnMetaInfo meta) {
-        super(meta, context);
+    private StringEditor(final Context context, final ColumnMetaInfo meta, final int id) {
+        super(meta, context, id);
         editValue.setInputType(InputType.TYPE_CLASS_TEXT);
         //todo mamton установить максимальное число знаков и так далее
     }

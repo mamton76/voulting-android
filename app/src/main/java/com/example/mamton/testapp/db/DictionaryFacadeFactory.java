@@ -13,8 +13,12 @@ public class DictionaryFacadeFactory {
     public static DictionaryFacade getFacade(@NonNull DBMetaInfo.Tables table, @NonNull Context context) {
         DictionaryFacade facade = facades.get(table);
         if (facade == null) {
-            facade = facades.putIfAbsent(table,
-                    new DictionaryFacade(context.getApplicationContext(), table.getMetaInfo()));
+            DictionaryFacade value = new DictionaryFacade(context.getApplicationContext(),
+                    table.getMetaInfo());
+            facade = facades.putIfAbsent(table, value);
+            if (facade == null) {
+                facade = value;
+            }
         }
         return facade;
     }

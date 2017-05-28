@@ -22,8 +22,12 @@ public class DictionaryModel {
     @NonNull
     public Observable<Cursor> getItems(@Nullable final String selection,
             @Nullable final String[] selectionArgs) {
-        return Observable
-                .fromCallable(() -> facade.getCursor(selection, selectionArgs, null, null));
+        return Observable.fromCallable(() -> facade.getCursor(selection, selectionArgs, null, null));
+    }
+
+    @NonNull
+    public Observable<DBEntity> getItem(long id) {
+        return Observable.fromCallable(() -> facade.getRecordByLocalId(id));
     }
 
     @Nullable

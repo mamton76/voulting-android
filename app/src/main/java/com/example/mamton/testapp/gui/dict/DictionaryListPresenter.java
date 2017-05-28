@@ -29,6 +29,12 @@ public class DictionaryListPresenter extends AbstractDictionaryPresenter<Diction
         reload();
     }
 
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        reload();
+    }
+
     public void reload() {
         getViewState().startLoading();
         StringBuilder where = new StringBuilder();
@@ -37,8 +43,9 @@ public class DictionaryListPresenter extends AbstractDictionaryPresenter<Diction
             where.append(filter.getWhereArguments());
             args.addAll(filter.getWhereArguments());
         });
-        Subscription subscription = model
-                .getItems(where.toString(), args.toArray(new String[args.size()])).subscribe(
+        Subscription subscription =
+                model.getItems(where.toString(), args.toArray(new String[args.size()]))
+                .subscribe(
                         items -> getViewState().showItems(items),
                         throwable -> getViewState().showError(throwable)
                 );

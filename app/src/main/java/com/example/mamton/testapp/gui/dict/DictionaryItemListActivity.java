@@ -83,7 +83,7 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
 
     @Override
     public void showError(final Throwable throwable) {
-        Timber.w(throwable, "On error ");
+        Timber.e(throwable, "On error ");
     }
 
     @Override
@@ -122,17 +122,16 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
         dictionaryCursorAdapter = new DictionaryCursorAdapter(this, null, getMetaFromIntent());
         dictionaryCursorAdapter.setOnItemClickListener(new ChangebleCursorRecyclerViewAdapter.OnItemClickListener<DBEntity>() {
             @Override
-            public void onItemSelected(final DBEntity item, final int position) {
+            public void onItemSelected(final long itemId, final int position) {
                 if (mTwoPane) {
                     if (itemDetailFragment != null) {
-                        itemDetailFragment.setActiveItem(item);
+                        itemDetailFragment.setActiveItem(itemId);
                     } else {
                         Timber.w("detail fragment not defined!");
                     }
                 } else {
                     Intent intent = DictionaryItemDetailActivity
-                            .getIntent(DictionaryItemListActivity.this, getMetaFromIntent(), item
-                                    .getId());
+                            .getIntent(DictionaryItemListActivity.this, getMetaFromIntent(), itemId);
                     startActivityForResult(intent, DictionaryItemDetailActivity.REQUEST_CODE_EDIT);
                 }
             }
@@ -152,7 +151,7 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode,
             final Intent data) {
+        presenter.reload(); //todo mamton только если что-то менялось все же следует делать
         super.onActivityResult(requestCode, resultCode, data);
-        presenter.reload();
     }
 }

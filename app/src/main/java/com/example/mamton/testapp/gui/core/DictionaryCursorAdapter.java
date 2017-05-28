@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.db.DB;
@@ -18,6 +19,9 @@ import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DictionaryCursorAdapter extends
         ChangebleCursorRecyclerViewAdapter<DictionaryCursorAdapter.ViewHolder, DBEntity> {
@@ -56,18 +60,26 @@ public class DictionaryCursorAdapter extends
         viewHolder.bindItem(entity);
         if (getOnItemClickListener() != null) {
             viewHolder.itemView.setOnClickListener((view) ->
-                    getOnItemClickListener().onItemSelected(entity, position));
+                    getOnItemClickListener().onItemSelected(entity.getId(), position));
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        View view = inflater.inflate(R.layout.dictionaryitem_list_content, parent);
+        View view = inflater.inflate(R.layout.dictionaryitem_list_content, parent, false);
+
         //todo mamton add fields!
         return new ViewHolder(view, meta);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.id)
+        TextView idView;
+
+        @BindView(R.id.item_content)
+        TextView contentView;
+
 
         private DBMetaInfo.Tables meta;
         private DBEntity entity;
@@ -76,12 +88,15 @@ public class DictionaryCursorAdapter extends
 
         public ViewHolder(View view, DBMetaInfo.Tables meta) {
             super(view);
+            ButterKnife.bind(this, view);
             this.meta = meta;
 
         }
 
         public void bindItem(@NonNull DBEntity entity) {
             this.entity = entity;
+            idView.setText(String.valueOf(entity.getId()));
+            contentView.setText(String.valueOf(entity.getValues()));
         }
     }
 }

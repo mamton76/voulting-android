@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 import com.example.mamton.testapp.model.AbstractEntity;
 import com.example.mamton.testapp.model.dbmodel.DBEntity;
 import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
@@ -26,9 +25,16 @@ public class DictionaryItemDetailPresenter extends AbstractDictionaryPresenter<D
         super(dictionaryModel, metaInfo);
     }
 
-    public void setActiveItem(final DBEntity activeItem) {
-        this.activeItem = activeItem;
-        getViewState().showItem(activeItem, metaInfo);
+    public void setActiveItem(final long activeItemId) {
+        getViewState().startLoading();
+        Subscription subscription = model.getItem(activeItemId).subscribe(
+                (item) -> {
+                    this.activeItem = item;
+                    getViewState().showItem(item, metaInfo);
+                },
+                throwable -> getViewState().showError(throwable)
+        );
+        subscriptions.add(subscription);
     }
 
     public void setItemFieldValue(@NonNull Context context, @NonNull DBEntity.FieldValue value) {

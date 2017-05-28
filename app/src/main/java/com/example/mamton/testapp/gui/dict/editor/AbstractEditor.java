@@ -36,26 +36,27 @@ public abstract class AbstractEditor<T> implements ValueEditor<DBEntity.FieldVal
 
     @NonNull
     public static ValueEditor createEditor(final ViewGroup container,
-            final ColumnMetaInfo columnMetaInfo) {
+            final ColumnMetaInfo columnMetaInfo, final int id) {
         ValueEditor editor;
         switch (columnMetaInfo.getType()) {
             case FK:
                 //todo mamton implement
             case NUMBER:
                 editor = NumberEditor
-                        .getInstance(container.getContext(), columnMetaInfo);
+                        .getInstance(container.getContext(), columnMetaInfo, id);
                 break;
             default:
                 editor = StringEditor
-                        .getInstance(container.getContext(), columnMetaInfo);
+                        .getInstance(container.getContext(), columnMetaInfo, id);
         }
         return editor;
     }
 
-    AbstractEditor(final ColumnMetaInfo meta, final Context context) {
+    AbstractEditor(final ColumnMetaInfo meta, final Context context, final int num) {
         this.meta = meta;
         view = LayoutInflater.from(context).inflate(R.layout.field_editor, null);
         ButterKnife.bind(this, view);
+        editValue.setId(num);
         editValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(final CharSequence s, final int start, final int count,
@@ -87,7 +88,7 @@ public abstract class AbstractEditor<T> implements ValueEditor<DBEntity.FieldVal
 
     @Override
     public void setValue(@Nullable final DBEntity.FieldValue<T> value) {
-        editValue.setText((value == null) ? "" : String.valueOf(value));
+        editValue.setText((value == null) ? "" : String.valueOf(value.getValue()));
     }
 
     @Override

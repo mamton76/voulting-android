@@ -1,5 +1,9 @@
 package com.example.mamton.testapp;
 
+import android.support.annotation.Nullable;
+
+import com.example.mamton.testapp.test.ArrayUtils;
+
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,6 +21,101 @@ import static junit.framework.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest1 {
+
+
+    @Test
+    public void testStrings() {
+        assertTrue(findSubstr("ac", "ac"));
+        assertTrue(findSubstr("abcd", "ac"));
+        assertTrue(findSubstr("abcd", null));
+        assertTrue(findSubstr("abcd", ""));
+        assertTrue(findSubstr("abcd", "cd"));
+        assertTrue(findSubstr("abcd", "c"));
+        assertFalse(findSubstr("abcd", "cc"));
+        assertFalse(findSubstr(null, "cc"));
+    }
+
+    public boolean findSubstr(@Nullable String s1, @Nullable String s2) {
+        if (s2 == null || s2.length() == 0) {
+            return true;
+        }
+
+        if (s1 == null || s1.length() < s2.length()) {
+            return false;
+        }
+
+        byte[] s1Bytes = s1.getBytes();
+        byte[] s2Bytes = s2.getBytes();
+
+        boolean lastFound = true;
+        int lastS = -1;
+
+        for (int i = 0; lastFound && (i < s2Bytes.length); i++) {
+            lastFound = false;
+            for (int j = lastS + 1; !lastFound && j < s1Bytes.length; j++) {
+                if (s1Bytes[j] == s2Bytes[i]) {
+                    lastFound = true;
+                    lastS = j;
+                }
+            }
+        }
+
+        return lastFound;
+    }
+
+
+    @Test
+    public void testStrings2() {
+        assertTrue(testSubstr2("ac", "ac"));
+        assertTrue(testSubstr2("abcd", "ba"));
+        assertTrue(testSubstr2("abcd", null));
+        assertTrue(testSubstr2("abcd", ""));
+        assertTrue(testSubstr2("abcd", "bc"));
+        assertTrue(testSubstr2("abcd", "ab"));
+        assertTrue(testSubstr2("abcd", "c"));
+        assertFalse(testSubstr2("abcd", "cc"));
+        assertFalse(testSubstr2("abcd", "ac"));
+        assertFalse(testSubstr2(null, "cc"));
+    }
+
+
+    boolean testSubstr2(@Nullable String s1, @Nullable String s2) {
+        if (s2 == null || s2.length() == 0) {
+            return true;
+        }
+
+        if (s1 == null || s1.length() < s2.length()) {
+            return false;
+        }
+
+        if (s2.length() > s1.length()) {
+            return false;
+        }
+
+        byte[] s2b = s2.getBytes();
+        Arrays.sort(s2b);
+
+        boolean found = false;
+
+        int lastDiffSize = 0;
+
+
+        byte[] s1b = s1.getBytes();
+        for (int i = 0; !found && i <= s1b.length - s2b.length; i = i + lastDiffSize) {
+            List<Byte> lbytes = ArrayUtils.toList(s2b);
+
+            for (int j = 0; j < s2b.length; j++) {
+                lbytes.remove((Byte) s1b[i + j]);
+            }
+            lastDiffSize = lbytes.size();
+
+            if (lastDiffSize == 0) {
+                found = true;
+            }
+        }
+
+        return found;
+    }
 
     @Test
     public void testSym() throws Exception {

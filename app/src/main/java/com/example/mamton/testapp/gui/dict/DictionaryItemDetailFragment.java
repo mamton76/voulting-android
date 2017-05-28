@@ -23,6 +23,7 @@ import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -130,21 +131,28 @@ public class DictionaryItemDetailFragment extends MvpFragment implements Diction
         ViewGroup rootView = (ViewGroup) inflater
                 .inflate(R.layout.dictionaryitem_detail, container, false);
         ButterKnife.bind(this, rootView);
-        DBMetaInfo.Tables metaFromArgs = getMetaFromArgs();
-        Stream.ofNullable(metaFromArgs.getMetaInfo().getColumns())
-                .forEach(columnMetaInfo -> {
-                    ValueEditor editor = AbstractEditor
-                            .createEditor(editorsContainer, columnMetaInfo);
-                    editor.addChangeListener(
-                            (value) -> {
-                                presenter.setItemFieldValue(editorsContainer.getContext(), value);
-                                fab.setEnabled(true);
-                            });
-                    editors.put(columnMetaInfo, editor);
-                    editorsContainer.addView(editor.getView());
-                });
+        List<ColumnMetaInfo> metaFromArgs = getMetaFromArgs().getMetaInfo().getColumns();
+        for (int i = 0; i < metaFromArgs.size(); i++) {
+            ColumnMetaInfo columnMetaInfo = metaFromArgs.get(i);
+            ValueEditor editor = AbstractEditor
+                    .createEditor(editorsContainer, columnMetaInfo, i);
+            editor.addChangeListener((value) -> {
+                        presenter.setItemFieldValue(editorsContainer.getContext(), value);
+                        fab.setEnabled(true);
+                    });
+            editors.put(columnMetaInfo, editor);
+            editorsContainer.addView(editor.getView());
+        }
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState == null && getArguments().get(ARG_ITEM_ID) != null) {
+            presenter.setActiveItem(getArguments().getLong(ARG_ITEM_ID));
+        }
     }
 
     private DBMetaInfo.Tables getMetaFromArgs() {
@@ -156,12 +164,7 @@ public class DictionaryItemDetailFragment extends MvpFragment implements Diction
         presenter.saveActiveItem();
     }
 
-    public void setActiveItem(final DBEntity activeItem) {
-        createPresenter().setActiveItem(activeItem);
+    public void setActiveItem(final long activeItem) {
+        presenter.setActiveItem(activeItem);
     }
-
-    public DBEntity getActiveItem() {
-        return presenter.getActiveItem();
-    }
-
 }

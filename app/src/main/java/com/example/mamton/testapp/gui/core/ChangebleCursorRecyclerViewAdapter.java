@@ -270,6 +270,7 @@ public abstract class ChangebleCursorRecyclerViewAdapter<VH extends RecyclerView
             }
         } else if (mCursor != null) {
             notifyDataSetChanged();
+            //было - но так не работало
             //notifyItemRangeInserted(0, mCursor.getCount());
         }
         return oldCursor;
@@ -286,6 +287,7 @@ public abstract class ChangebleCursorRecyclerViewAdapter<VH extends RecyclerView
 
     public interface OnItemClickListener<T> {
         void onItemSelected(long itemId, int position);
+        void onItemDelete(long itemId, int position);
     }
 
     private class NotifyingDataSetObserver extends DataSetObserver {

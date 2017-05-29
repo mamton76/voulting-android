@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
 import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.db.DB;
 import com.example.mamton.testapp.db.DictionaryFacadeFactory;
@@ -61,12 +63,15 @@ public class DictionaryCursorAdapter extends
         if (getOnItemClickListener() != null) {
             viewHolder.itemView.setOnClickListener((view) ->
                     getOnItemClickListener().onItemSelected(entity.getId(), position));
+            viewHolder.deleteButton.setOnClickListener((view) ->
+                    getOnItemClickListener().onItemDelete(entity.getId(), position));
         }
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        View view = inflater.inflate(R.layout.dictionaryitem_list_content, parent, false);
+        View view = inflater.inflate(R.layout.dictionaryitem_list_item_content, parent, false);
 
         //todo mamton add fields!
         return new ViewHolder(view, meta);
@@ -80,6 +85,8 @@ public class DictionaryCursorAdapter extends
         @BindView(R.id.item_content)
         TextView contentView;
 
+        @BindView(R.id.item_delete)
+        Button deleteButton;
 
         private DBMetaInfo.Tables meta;
         private DBEntity entity;
@@ -96,7 +103,12 @@ public class DictionaryCursorAdapter extends
         public void bindItem(@NonNull DBEntity entity) {
             this.entity = entity;
             idView.setText(String.valueOf(entity.getId()));
-            contentView.setText(String.valueOf(entity.getValues()));
+            StringBuilder itemContent = new StringBuilder();
+            Stream.ofNullable(entity.getValues().entrySet())
+                    .filter(entry -> (entry.getKey().getFlags() & ColumnMetaInfo.FLAG_MAIN) == ColumnMetaInfo.FLAG_MAIN)
+                    .forEach(entry -> itemContent.append(entry.getValue().getShownValue()).append(' '));
+            contentView.setText(itemContent.toString());
         }
+
     }
 }

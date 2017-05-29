@@ -22,4 +22,5 @@ class AbstractDictionaryPresenter<T extends CommonView> extends MvpPresenter<T> 
         this.model = model;
         this.metaInfo = metaInfo;
     }
+
 }

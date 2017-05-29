@@ -38,4 +38,8 @@ public class DictionaryModel {
     public Observable<Long> saveItem(final DBEntity activeItem) {
         return Observable.fromCallable(() -> facade.insert(activeItem));
     }
+
+    public Observable<Boolean> deleteItem(final long itemId) {
+        return Observable.fromCallable(() -> facade.removeByLocalId(itemId));
+    }
 }

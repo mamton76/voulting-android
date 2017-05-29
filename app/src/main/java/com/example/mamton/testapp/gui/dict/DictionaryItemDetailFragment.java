@@ -167,4 +167,5 @@ public class DictionaryItemDetailFragment extends MvpFragment implements Diction
     public void setActiveItem(final long activeItem) {
         presenter.setActiveItem(activeItem);
     }
+
 }

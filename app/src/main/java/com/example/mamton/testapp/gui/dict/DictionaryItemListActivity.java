@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.example.mamton.testapp.R;
+import com.example.mamton.testapp.db.DB;
 import com.example.mamton.testapp.db.DictionaryFacadeFactory;
 import com.example.mamton.testapp.gui.core.ChangebleCursorRecyclerViewAdapter;
 import com.example.mamton.testapp.gui.core.DictionaryCursorAdapter;
@@ -119,7 +120,18 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
         ButterKnife.bind(this);
 
         recyclerView.setVisibility(View.GONE);
-        dictionaryCursorAdapter = new DictionaryCursorAdapter(this, null, getMetaFromIntent());
+
+        dictionaryCursorAdapter = new DictionaryCursorAdapter(this, null, DB.FIELD_COMMON_ID, getMetaFromIntent());
+        dictionaryCursorAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(final int positionStart, final int itemCount) {
+                //todo mamton только для последнего делать
+                recyclerView.scrollToPosition(positionStart);
+            }
+
+
+
+        });
         dictionaryCursorAdapter.setOnItemClickListener(new ChangebleCursorRecyclerViewAdapter.OnItemClickListener<DBEntity>() {
             @Override
             public void onItemSelected(final long itemId, final int position) {
@@ -134,6 +146,11 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
                             .getIntent(DictionaryItemListActivity.this, getMetaFromIntent(), itemId);
                     startActivityForResult(intent, DictionaryItemDetailActivity.REQUEST_CODE_EDIT);
                 }
+            }
+
+            @Override
+            public void onItemDelete(final long itemId, final int position) {
+                presenter.deleteItem(itemId);
             }
         });
         recyclerView.setAdapter(dictionaryCursorAdapter);

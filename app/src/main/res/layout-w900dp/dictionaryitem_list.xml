@@ -20,7 +20,7 @@
         android:layout_marginLeft="16dp" android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.example.mamton.testapp.gui.dict.DictionaryItemListActivity"
-        tools:listitem="@layout/dictionaryitem_list_content" />
+        tools:listitem="@layout/dictionaryitem_list_item_content" />
 
     <FrameLayout android:id="@+id/dictionaryitem_detail_container" android:layout_width="0dp"
         android:layout_height="match_parent" android:layout_weight="3" />

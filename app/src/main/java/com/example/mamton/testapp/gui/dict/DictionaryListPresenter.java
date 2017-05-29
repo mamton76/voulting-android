@@ -35,6 +35,19 @@ public class DictionaryListPresenter extends AbstractDictionaryPresenter<Diction
         reload();
     }
 
+    public void deleteItem(final long itemId) {
+        Subscription subscription =
+                model.deleteItem(itemId)
+                        .doOnError((err) -> getViewState().showError(err))
+                        .doOnNext((done) -> {
+                                    if (done) {
+                                        reload();
+                                    }
+                                }).subscribe();
+        subscriptions.add(subscription);
+    }
+
+
     public void reload() {
         getViewState().startLoading();
         StringBuilder where = new StringBuilder();
@@ -45,10 +58,10 @@ public class DictionaryListPresenter extends AbstractDictionaryPresenter<Diction
         });
         Subscription subscription =
                 model.getItems(where.toString(), args.toArray(new String[args.size()]))
-                .subscribe(
-                        items -> getViewState().showItems(items),
-                        throwable -> getViewState().showError(throwable)
-                );
+                        .subscribe(
+                                items -> getViewState().showItems(items),
+                                throwable -> getViewState().showError(throwable)
+                        );
         subscriptions.add(subscription);
     }
 

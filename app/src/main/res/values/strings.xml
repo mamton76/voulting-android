@@ -8,5 +8,6 @@
 
     <string name="title_dictionary_club">Клубы</string>
     <string name="title_dictionary_horse">Лошади</string>
+    <string name="action_delete">Удалить</string>
 
 </resources>

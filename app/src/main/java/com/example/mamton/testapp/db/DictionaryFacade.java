@@ -71,7 +71,7 @@ public class DictionaryFacade extends AbstractFacade<DBEntity> {
     protected ContentValues appendContentValues(@NonNull final DBEntity object,
             @NonNull final ContentValues values) {
         Stream.ofNullable(object.getValues().entrySet())
-                .filter(entry -> (entry.getValue() == null))
+                .filter(entry -> (entry.getValue() != null))
                 .forEach(entry -> {
                     switch (entry.getKey().getType()) {
                         case NUMBER :

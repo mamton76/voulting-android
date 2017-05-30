@@ -14,6 +14,8 @@ import com.example.mamton.testapp.R;
 import com.example.mamton.testapp.gui.dict.DictionaryItemListActivity;
 import com.example.mamton.testapp.model.Event;
 import com.example.mamton.testapp.model.dbmodel.DBMetaInfo;
+import com.facebook.stetho.Stetho;
+import com.idescout.sql.SqlScoutServer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SqlScoutServer.create(this, getPackageName());
+        Stetho.initializeWithDefaults(this.getApplicationContext());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 

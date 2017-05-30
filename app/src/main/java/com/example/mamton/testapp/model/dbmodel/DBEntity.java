@@ -37,11 +37,16 @@ public class DBEntity extends AbstractEntity {
 
     public void setFieldValue(@NonNull final FieldValue fieldValue) {
         FieldValue fieldValuePrev = values.get(fieldValue.getMeta());
-        if (fieldValue.getValue() == null && fieldValuePrev != null && fieldValuePrev.getValue() == null
-            || fieldValue.getValue() != null && ((fieldValuePrev == null) || fieldValue.getValue().equals(fieldValuePrev.getValue()))) {
+        if (isValueEmpty(fieldValue) && !isValueEmpty(fieldValuePrev)
+            || !isValueEmpty(fieldValue) && (isValueEmpty(fieldValuePrev) ||
+                !fieldValue.getValue().equals(fieldValuePrev.getValue()))) {
             values.put(fieldValue.getMeta(), fieldValue);
             localVersion ++;
         }
+    }
+
+    public static boolean isValueEmpty(final @Nullable FieldValue fieldValue) {
+        return (fieldValue == null) || fieldValue.getValue() == null;
     }
 
     public static class ForeignFieldValue extends FieldValue<Long> {
@@ -57,7 +62,8 @@ public class DBEntity extends AbstractEntity {
             if (foreignEntity != null) {
                 StringBuilder res = new StringBuilder();
                 Stream.ofNullable(table.getMetaInfo().getColumns())
-                        .filter(columnMeta -> ((columnMeta.getFlags() & ColumnMetaInfo.FLAG_MAIN) == 1)
+                        .filter(columnMeta ->
+                                ((columnMeta.getFlags() & ColumnMetaInfo.FLAG_MAIN) == ColumnMetaInfo.FLAG_MAIN)
                                         && foreignEntity.getValues().get(columnMeta) != null)
                         .forEach(columnMeta -> res.append(foreignEntity.getValues().get(columnMeta)));
                 this.shownValue = res.toString();

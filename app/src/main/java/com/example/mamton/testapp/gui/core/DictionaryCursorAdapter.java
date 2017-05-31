@@ -104,9 +104,11 @@ public class DictionaryCursorAdapter extends
             this.entity = entity;
             idView.setText(String.valueOf(entity.getId()));
             StringBuilder itemContent = new StringBuilder();
-            Stream.ofNullable(entity.getValues().entrySet())
-                    .filter(entry -> (entry.getKey().getFlags() & ColumnMetaInfo.FLAG_MAIN) == ColumnMetaInfo.FLAG_MAIN)
-                    .forEach(entry -> itemContent.append(entry.getValue().getShownValue()).append(' '));
+
+            Stream.ofNullable(meta.getMetaInfo().getColumns())
+                    .filter(column -> (column.getFlags() & ColumnMetaInfo.FLAG_MAIN) == ColumnMetaInfo.FLAG_MAIN)
+                    .filter(column -> entity.getValues().containsKey(column))
+                    .forEach(column -> itemContent.append(entity.getValues().get(column).getShownValue()).append(' '));
             contentView.setText(itemContent.toString());
         }
 

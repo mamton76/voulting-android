@@ -65,7 +65,7 @@ public class DBEntity extends AbstractEntity {
                         .filter(columnMeta ->
                                 ((columnMeta.getFlags() & ColumnMetaInfo.FLAG_MAIN) == ColumnMetaInfo.FLAG_MAIN)
                                         && foreignEntity.getValues().get(columnMeta) != null)
-                        .forEach(columnMeta -> res.append(foreignEntity.getValues().get(columnMeta)));
+                        .forEach(columnMeta -> res.append(foreignEntity.getValues().get(columnMeta).getShownValue() + ' '));
                 this.shownValue = res.toString();
             } else {
                 this.shownValue = "";

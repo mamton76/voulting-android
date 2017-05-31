@@ -7,10 +7,9 @@ public class ColumnFKMetaInfo extends ColumnMetaInfo {
     private final DBMetaInfo.Tables table;
 
     ColumnFKMetaInfo(@NonNull final String name,
-            @NonNull final ColumnType type,
             final int flags,
             @NonNull final DBMetaInfo.Tables table) {
-        super(name, type, flags);
+        super(name, ColumnType.FK, flags);
         this.table = table;
     }
 

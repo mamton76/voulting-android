@@ -121,7 +121,7 @@ public class DictionaryItemListActivity extends AbstractDictionaryActivity imple
 
         recyclerView.setVisibility(View.GONE);
 
-        dictionaryCursorAdapter = new DictionaryCursorAdapter(this, null, DB.FIELD_COMMON_ID, getMetaFromIntent());
+        dictionaryCursorAdapter = new DictionaryCursorAdapter(this, null, DB.FIELD_COMMON_LOCAL_VERSION, getMetaFromIntent());
         dictionaryCursorAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(final int positionStart, final int itemCount) {

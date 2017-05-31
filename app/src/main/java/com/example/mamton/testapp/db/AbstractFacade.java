@@ -61,7 +61,7 @@ public abstract class AbstractFacade<T extends AbstractEntity> {
         ContentValues values = new ContentValues();
         if (object.getId() != -1) {
             values.put(DB.FIELD_COMMON_ID, object.getId());
-            values.put(DB.FIELD_COMMON_LOCAL_VERSION, object.getId());
+            values.put(DB.FIELD_COMMON_LOCAL_VERSION, object.getLocalVersion());
         }
         values.put(DB.FIELD_COMMON_SERVER_ID, object.getServerId());
         values.put(DB.FIELD_COMMON_SERVER_VERSION, object.getServerVersion());

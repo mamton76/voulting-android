@@ -20,8 +20,8 @@ public class DBMetaInfo {
                 Arrays.asList(
                         new ColumnMetaInfo(DB.FIELD_HORSE_NAME, ColumnMetaInfo.ColumnType.STRING,
                                 ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE),
-                        new ColumnMetaInfo(DB.FIELD_HORSE_CLUB_ID, ColumnMetaInfo.ColumnType.FK,
-                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE))),
+                        new ColumnFKMetaInfo(DB.FIELD_HORSE_CLUB_ID,
+                                ColumnMetaInfo.FLAG_MAIN | ColumnMetaInfo.FLAG_MODIFIABLE, CLUB))),
                 R.string.title_dictionary_horse);
 
         @NonNull
